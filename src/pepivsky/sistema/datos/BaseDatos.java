@@ -98,6 +98,47 @@ public class BaseDatos {
         }
     }
     
+    /**
+     * Este método borra el producto seleccionado en la tabla, del frame "InventariosFrame"
+     * 
+     */
+    
+    public void BorrarProducto(Producto producto){
+        try {
+            //Obtener conexión a partir del driver
+            conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/base-sistema","postgres","1997"); //Url BD, usuario, password
+            
+           
+             String sql = "DELETE FROM cat_productos WHERE id_producto = ?";
+            
+            
+            pst = conexion.prepareStatement(sql);
+            
+            
+            pst.setString(1, producto.getIdProducto());
+            
+            
+            
+            pst.executeUpdate();
+            
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        
+        //Cerrar conexion al terminar
+        finally{
+            try {
+                pst.close();
+                conexion.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            
+        }
+        //return listaProductos;
+        
+    }
     
     
     /**
