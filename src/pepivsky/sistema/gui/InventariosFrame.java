@@ -55,7 +55,7 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
     
     //MÃ©todo que carga el modelo en la tabla de inventarios
     public void cargarModeloTabla(){
-        
+        limpiarTabla();
         
         ArrayList<Producto> listaProductos = base.obtenerProductos();
         int numeroProductos = listaProductos.size();
@@ -120,7 +120,6 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         campoAgregarExistencia = new javax.swing.JTextField();
         btnAgregarE = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        campoBuscar = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaProducto = new javax.swing.JTable();
         tablaProducto.getSelectionModel().addListSelectionListener(
@@ -143,6 +142,7 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
 
         btnActualizar = new javax.swing.JButton();
         btnBorrar = new javax.swing.JButton();
+        campoBuscar = new javax.swing.JTextField();
 
         btnProveedor.setText("Nuevo proveedor");
         btnProveedor.addActionListener(new java.awt.event.ActionListener() {
@@ -192,17 +192,6 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
 
         jLabel7.setText("Buscar artículo:");
 
-        campoBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                campoBuscarActionPerformed(evt);
-            }
-        });
-        campoBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                campoBuscarKeyReleased(evt);
-            }
-        });
-
         tablaProducto.setModel(modeloTabla);
         jScrollPane1.setViewportView(tablaProducto);
 
@@ -217,6 +206,12 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         btnBorrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarActionPerformed(evt);
+            }
+        });
+
+        campoBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                campoBuscarKeyReleased(evt);
             }
         });
 
@@ -241,10 +236,6 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
                         .addGap(91, 91, 91)
                         .addComponent(jLabel3))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(43, 43, 43)
-                        .addComponent(campoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 603, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,11 +248,13 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel5))
                             .addComponent(jLabel4)
                             .addComponent(campoExistenciaProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoAgregarExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(campoAgregarExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(campoNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAgregarE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(campoNombreProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                            .addComponent(btnAgregarE)
+                            .addComponent(campoBuscar))))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -304,7 +297,7 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
                         .addComponent(btnActualizar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBorrar)))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pack();
@@ -326,6 +319,8 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         articulo.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         articulo.setLocation(600,150);
         articulo.setAlwaysOnTop(true);
+        limpiarTabla();
+        cargarModeloTabla();
 
     }//GEN-LAST:event_btnNuevoArticuloActionPerformed
 
@@ -358,38 +353,34 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         cargarModeloTabla();
     }//GEN-LAST:event_btnAgregarEActionPerformed
 
-    private void campoBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoBuscarKeyReleased
-        // KeyReleased 
-        limpiarTabla();
-        String cadenaBusqueda = campoBuscar.getText();
-        ArrayList<Producto> listaProductos = base.obtenerProductosPorCriterio(cadenaBusqueda);
-
-        int numeroProductos = listaProductos.size();
-        modeloTabla.setNumRows(numeroProductos);
-        for (int i = 0; i < numeroProductos; i++) {
-            Producto producto = listaProductos.get(i);
-            String clave = producto.getIdProducto();
-            String nombre = producto.getNombreProducto();
-            String unidad = producto.getUnidadProducto();
-            Double precioCompra = producto.getPrecioCompaProducto();
-            Double precioVenta = producto.getPrecioVentaProducto();
-            Double existencias = producto.getExistenciasProducto();
-
-            //modeloTabla.setValueAt(clave, i, 0);
-            modeloTabla.setValueAt(producto, i, 0);
-            modeloTabla.setValueAt(nombre, i, 1);
-            modeloTabla.setValueAt(unidad, i, 2);
-            modeloTabla.setValueAt(precioCompra, i, 3);
-            modeloTabla.setValueAt(precioVenta, i, 4);
-            modeloTabla.setValueAt(existencias, i, 5);
-        }
-
-    }//GEN-LAST:event_campoBuscarKeyReleased
-
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         // TODO add your handling code here:
         
+        String nombreProducto = productoSeleccionado.getNombreProducto();
+        ImageIcon imagenProducto = null;
+        NuevoProductoFrame frameprod = null;
+        int opcion = JOptionPane.showConfirmDialog(this, "¿Está seguro de modificar el artículo "+nombreProducto+"?");
         
+        if (opcion == 0) {
+            try {
+                //Obtener imagen
+                InputStream is = base.buscarFoto(productoSeleccionado);
+                BufferedImage  bi = ImageIO.read(is);
+                imagenProducto = new ImageIcon(bi);
+                
+                //crear ventana de actualización
+                frameprod = new NuevoProductoFrame(null, true, productoSeleccionado, imagenProducto, "Actualizar producto", true);
+                frameprod.setVisible(true);
+                if(frameprod != null){
+                    if(frameprod.getInformacion()!=""){
+                        cargarModeloTabla();
+                    }
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                
+            }
+                
         /*String nombreProducto = productoSeleccionado.getNombreProducto();
         ImageIcon imagenProducto = null;
         NuevoProductoFrame frameprod = null;
@@ -414,13 +405,9 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
             } catch (IOException ex) {
                 ex.printStackTrace();
                 
-            }}*/
+            }}*/}
 
     }//GEN-LAST:event_btnActualizarActionPerformed
-
-    private void campoBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoBuscarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campoBuscarActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
         // Ventana de confirmación
@@ -434,6 +421,34 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
             
         }
     }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void campoBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoBuscarKeyReleased
+        // TODO add your handling code here:
+        limpiarTabla();
+        String cadenaBusqueda = campoBuscar.getText();
+        ArrayList<Producto> listaProductos = base.obtenerProductosPorCriterio(cadenaBusqueda);
+        
+        int numeroProductos = listaProductos.size();
+        
+        modeloTabla.setNumRows(numeroProductos);
+        
+        for(int i = 0; i < numeroProductos; i++){
+            Producto producto = listaProductos.get(i);
+            String clave = producto.getIdProducto();
+            String nombre = producto.getNombreProducto();
+            String unidad = producto.getUnidadProducto();
+            Double precioCompra = producto.getPrecioCompaProducto();
+            Double precioVenta = producto.getPrecioVentaProducto();
+            Double existencias = producto.getExistenciasProducto();
+            
+            modeloTabla.setValueAt(producto, i, 0);
+            modeloTabla.setValueAt(nombre, i, 1);
+            modeloTabla.setValueAt(unidad, i, 2);
+            modeloTabla.setValueAt(precioCompra, i, 3);
+            modeloTabla.setValueAt(precioVenta, i, 4);
+            modeloTabla.setValueAt(existencias, i, 5);
+        }
+    }//GEN-LAST:event_campoBuscarKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

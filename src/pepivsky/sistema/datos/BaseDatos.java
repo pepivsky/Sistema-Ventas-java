@@ -149,7 +149,7 @@ public class BaseDatos {
         InputStream streamFoto = null;
         
         try {
-            conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "123");
+             conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/base-sistema","postgres","1997"); //Url BD, usuario, password
             
             String sql = "SELECT foto_producto from cat_productos where id_producto = ?";
             

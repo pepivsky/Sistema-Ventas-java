@@ -68,7 +68,7 @@ public class NuevoProductoFrame extends javax.swing.JDialog {
     
     private void cargarProducto(Producto producto, ImageIcon icono){
         
-        //Redimensión de imagen para ajustarla al tamaño del JLabel.
+        /*//Redimensión de imagen para ajustarla al tamaño del JLabel.
         Image imgProd = icono.getImage();
         int anchoEtiqueta = lblImagenArticulo.getWidth(); //Obtiene ancho de la imagen
         int altoEtiqueta = lblImagenArticulo.getHeight(); //Obtiene alto de la imagen
@@ -77,9 +77,9 @@ public class NuevoProductoFrame extends javax.swing.JDialog {
         Image imgRedimensionada = imgProd.getScaledInstance(anchoEtiqueta, altoEtiqueta, Image.SCALE_DEFAULT);
                
         //Se crea un nuevo objeto ImageIcon a partir de la imagen redimensionada.
-        ImageIcon iconRedimensionado = new ImageIcon(imgRedimensionada);
+        ImageIcon iconRedimensionado = new ImageIcon(imgRedimensionada);*/
         
-        lblImagenArticulo.setIcon(iconRedimensionado);
+        lblImagenArticulo.setIcon(icono);
         String clave = producto.getIdProducto();
         String nombre = producto.getNombreProducto();
         String descripcion = producto.getDescripcionProducto();
